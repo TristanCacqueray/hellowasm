@@ -1,3 +1,6 @@
+let main = require("./main.js");
+
+exports.load = function(wasmURL, callback) {
 var Module = {};
 var ASSERTIONS = 1;
 /**
@@ -148,7 +151,6 @@ function intArrayToString(array) {
   return ret.join("");
 }
 
-var wasmURL = "main.wasm";
 var wasmXHR = new XMLHttpRequest();
 wasmXHR.open("GET", wasmURL, true);
 wasmXHR.responseType = "arraybuffer";
@@ -161,9 +163,8 @@ wasmXHR.onload = function () {
       Module.wasmBinary = wasmURLBytes.buffer;
     }
   }
-
-  var script = document.createElement("script");
-  script.src = "main.js";
-  document.body.appendChild(script);
+  main.init(Module);
+  callback(Module)();
 };
 wasmXHR.send(null);
+}

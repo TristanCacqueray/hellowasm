@@ -1,9 +1,15 @@
 "use strict";
 
-let main = require('../../main.js')
+let loader = require("../../loader.js");
 
-exports.addInt = function(x, y) {
-  return main._add_int(x, y);
+exports.withWasm = (wasmURL, callback) => () => {
+  loader.load(wasmURL, callback)
 };
 
-exports.version = main.ccall("version", 'string', []);
+exports.addInt = function (module, x, y) {
+  return module._add_int(x, y);
+};
+
+exports.version = function (module) {
+  return module.ccall("version", 'string', []);
+}
